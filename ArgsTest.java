@@ -1,6 +1,8 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+
 public class ArgsTest {
   @Test
   public void testOneBooleanPresent() throws Exception {
@@ -22,5 +24,15 @@ public class ArgsTest {
     Args args = new Args("x*", new String[]{"-x", "hello"});
     assertEquals(true, args.isValid());
     assertEquals("hello", args.getString('x'));
+  }
+
+
+  @Test
+  public void testWithNoSchemaButWithMultipleArguments() throws Exception {
+    try {
+      new Args("", new String[]{"-x", "-y"});
+      fail();
+    } catch (ParseException e) {
+    }
   }
 }

@@ -10,6 +10,7 @@ public class Args {
   private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<Character, ArgumentMarshaler>();
   private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<Character, ArgumentMarshaler>();
   private Map<Character, ArgumentMarshaler> intArgs = new HashMap<Character, ArgumentMarshaler>();
+  private Map<Character, ArgumentMarshaler> marshalers = new HashMap<Character, ArgumentMarshaler>();
   private Set<Character> argsFound = new HashSet<Character>();
   private int currentArgument;
   private char errorArgument = '\0';
@@ -62,7 +63,9 @@ public class Args {
   }
 
   private void parseStringSchemaElement(char elementId) {
-    stringArgs.put(elementId, new StringArgumentMarshaler());
+    ArgumentMarshaler m = new StringArgumentMarshaler();
+    stringArgs.put(elementId, m);
+    marshalers.put(elementId, m);
   }
 
   private boolean isStringSchemaElement(String elementTail) {
@@ -78,11 +81,15 @@ public class Args {
   }
 
   private void parseBooleanSchemaElement(char elementId) {
-    booleanArgs.put(elementId, new BooleanArgumentMarshaler());
+    ArgumentMarshaler m = new BooleanArgumentMarshaler();
+    booleanArgs.put(elementId, m);
+    marshalers.put(elementId, m);
   }
 
   private void parseIntegerSchemaElement(char elementId) {
-    intArgs.put(elementId, new IntegerArgumentMarshaler());
+    ArgumentMarshaler m = new IntegerArgumentMarshaler();
+    intArgs.put(elementId, m);
+    marshalers.put(elementId, m);
   }
 
   private boolean parseArguments() {
@@ -228,45 +235,19 @@ public class Args {
     return valid;
   }
 
-  private class ArgumentMarshaler {
-    protected boolean booleanValue = false;
-    private String stringValue;
-    private int integerValue;
-
-    public boolean getBoolean() {return booleanValue;}
-
-    public void setString(String s) {
-      stringValue = s;
-    }
-
-    public String getString() {
-      return stringValue == null ? "" : stringValue;
-    }
-
-    public void setInteger(int i) {
-      integerValue = i;
-    }
-
-    public int getInteger() {
-      return integerValue;
-    }
-
-    public void set(String s) {
-
-    }
-
-    public Object get() {
-      return null;
-    }
+  private abstract class ArgumentMarshaler {
+    public abstract void set(String s);
+    public abstract Object get();
   }
 
-  private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+  private  class BooleanArgumentMarshaler extends ArgumentMarshaler {
     private boolean booleanValue = false;
+
     public void set(String s) {
       booleanValue = true;
     }
 
-    public Object get() {
+    public  Object get() {
       return booleanValue;
     }
   }

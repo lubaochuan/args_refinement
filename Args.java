@@ -120,62 +120,59 @@ public class Args {
   }
 
   private boolean setArgument(char argChar) {
-    boolean set = true;
-    if (isBooleanArg(argChar))
-      setBooleanArg(argChar, true);
-    else if (isStringArg(argChar))
-      setStringArg(argChar, "");
-      else if (isIntegerArg(argChar))
-      setIntArg(argChar);
+    ArgumentMarshaler m = marshalers.get(argChar);
+    if (m instanceof BooleanArgumentMarshaler)
+      setBooleanArg(m);
+    else if (m instanceof StringArgumentMarshaler)
+      setStringArg(m);
+    else if (m instanceof IntegerArgumentMarshaler)
+      setIntArg(m);
     else
-      set = false;
-
-    return set;
+      return false;
+    return true;
   }
 
-  private void setStringArg(char argChar, String s) {
+  private void setStringArg(ArgumentMarshaler m) {
     currentArgument++;
     try {
-      stringArgs.get(argChar).set(args[currentArgument]);
+      m.set(args[currentArgument]);
     } catch (ArrayIndexOutOfBoundsException e) {
       valid = false;
-      errorArgument = argChar;
       errorCode = ErrorCode.MISSING_STRING;
     }
   }
 
-  private boolean isStringArg(char argChar) {
-    ArgumentMarshaler m = marshalers.get(argChar);
+  private void setBooleanArg(ArgumentMarshaler m) {
+    try{
+      m.set("true");
+    } catch (Exception e){
+
+    }
+  }
+
+  private boolean isStringArg(ArgumentMarshaler m) {
     return m instanceof StringArgumentMarshaler;
   }
 
-  private boolean isBooleanArg(char argChar) {
-    ArgumentMarshaler m = marshalers.get(argChar);
+  private boolean isBooleanArg(ArgumentMarshaler m) {
     return m instanceof BooleanArgumentMarshaler;
   }
 
-  private boolean isIntegerArg(char argChar) {
-    ArgumentMarshaler m = marshalers.get(argChar);
+  private boolean isIntegerArg(ArgumentMarshaler m) {
     return m instanceof IntegerArgumentMarshaler;
   }
 
-  private void setBooleanArg(char argChar, boolean value) {
-    booleanArgs.get(argChar).set("true");
-  }
-
-  private void setIntArg(char argChar) {
+  private void setIntArg(ArgumentMarshaler m) {
     currentArgument++;
     String parameter = null;
     try {
       parameter = args[currentArgument];
-      intArgs.get(argChar).set(parameter);
+      m.set(parameter);
     } catch (ArrayIndexOutOfBoundsException e) {
       valid = false;
-      errorArgument = argChar;
       errorCode = ErrorCode.MISSING_INTEGER;
     } catch (NumberFormatException e) {
       valid = false;
-      errorArgument = argChar;
       errorCode = ErrorCode.INVALID_INTEGER;
     }
   }

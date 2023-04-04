@@ -20,6 +20,13 @@ public class ArgsTest {
   }
 
   @Test
+  public void testOneIntPresent() throws Exception {
+    Args args = new Args("n#", new String[]{"-n", "1"});
+    assertEquals(true, args.isValid());
+    assertEquals(1, args.getInt('n'));
+  }
+
+  @Test
   public void testOneStringPresent() throws Exception {
     Args args = new Args("x*", new String[]{"-x", "hello"});
     assertEquals(true, args.isValid());

@@ -1,9 +1,10 @@
 Schema:
 * `char` - Boolean arg.
 * `char*` - String arg.
+* `char#` - Integer arg.
 
-Example schema: `l,d*`
-Coresponding command line: `-l -d tmp`
+Example schema: `l,d*,n#`
+Coresponding command line: `-l -d tmp -n 1`
 
 Simple tests for the "Boolean and String" version of Args:
 ```

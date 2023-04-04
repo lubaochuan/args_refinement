@@ -29,10 +29,7 @@ public class ArgsTest {
 
   @Test
   public void testWithNoSchemaButWithMultipleArguments() throws Exception {
-    try {
-      new Args("", new String[]{"-x", "-y"});
-      fail();
-    } catch (ParseException e) {
-    }
+    Args args = new Args("x,y", new String[]{"-x", "-y"});
+    assertEquals(false, args.getBoolean('z'));
   }
 }

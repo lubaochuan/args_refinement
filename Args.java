@@ -121,11 +121,11 @@ public class Args {
 
   private boolean setArgument(char argChar) {
     boolean set = true;
-    if (isBoolean(argChar))
+    if (isBooleanArg(argChar))
       setBooleanArg(argChar, true);
-    else if (isString(argChar))
+    else if (isStringArg(argChar))
       setStringArg(argChar, "");
-      else if (isInteger(argChar))
+      else if (isIntegerArg(argChar))
       setIntArg(argChar);
     else
       set = false;
@@ -144,20 +144,23 @@ public class Args {
     }
   }
 
-  private boolean isString(char argChar) {
-    return stringArgs.containsKey(argChar);
+  private boolean isStringArg(char argChar) {
+    ArgumentMarshaler m = marshalers.get(argChar);
+    return m instanceof StringArgumentMarshaler;
+  }
+
+  private boolean isBooleanArg(char argChar) {
+    ArgumentMarshaler m = marshalers.get(argChar);
+    return m instanceof BooleanArgumentMarshaler;
+  }
+
+  private boolean isIntegerArg(char argChar) {
+    ArgumentMarshaler m = marshalers.get(argChar);
+    return m instanceof IntegerArgumentMarshaler;
   }
 
   private void setBooleanArg(char argChar, boolean value) {
     booleanArgs.get(argChar).set("true");
-  }
-
-  private boolean isBoolean(char argChar) {
-    return booleanArgs.containsKey(argChar);
-  }
-
-  private boolean isInteger(char argChar) {
-    return intArgs.containsKey(argChar);
   }
 
   private void setIntArg(char argChar) {

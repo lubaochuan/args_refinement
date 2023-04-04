@@ -13,3 +13,13 @@ The argument format is valid
 logging is true
 directory is tmp
 ```
+
+To compile test:
+```
+javac -cp .:junit-platform-console-standalone-1.9.0.jar ArgsTest.java
+```
+
+To run test:
+```
+java -jar junit-platform-console-standalone-1.9.0.jar --class-path . --select-class ArgsTest
+```

@@ -158,7 +158,7 @@ public class Args {
     String parameter = null;
     try {
       parameter = args[currentArgument];
-      intArgs.get(argChar).setInteger(Integer.parseInt(parameter));
+      intArgs.get(argChar).set(parameter);
     } catch (ArrayIndexOutOfBoundsException e) {
       valid = false;
       errorArgument = argChar;
@@ -217,7 +217,7 @@ public class Args {
 
   public int getInt(char arg) {
     Args.ArgumentMarshaler am = intArgs.get(arg);
-    return am == null ? 0 : am.getInteger();
+    return am == null ? 0 : (Integer) am.get();
   }
 
   public boolean has(char arg) {
@@ -284,6 +284,17 @@ public class Args {
   }
 
   private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    private int intValue = 0;
+
+    public void set(String s) {
+      try {
+        intValue = Integer.parseInt(s);
+      } catch (NumberFormatException e) {}
+    }
+
+    public Object get() {
+      return intValue;
+    }
   }
 }
 

@@ -45,11 +45,11 @@ public class Args {
     String elementTail = element.substring(1);
     validateSchemaElementId(elementId);
     if (isBooleanSchemaElement(elementTail))
-      parseBooleanSchemaElement(elementId);
+      marshalers.put(elementId, new BooleanArgumentMarshaler());
     else if (isStringSchemaElement(elementTail))
-      parseStringSchemaElement(elementId);
+      marshalers.put(elementId, new StringArgumentMarshaler());
     else if (isIntegerSchemaElement(elementTail))
-      parseIntegerSchemaElement(elementId);
+      marshalers.put(elementId, new IntegerArgumentMarshaler());
   }
 
   private void validateSchemaElementId(char elementId) throws ParseException{
@@ -57,10 +57,6 @@ public class Args {
       throw new ParseException(
         "Bad character:" + elementId + "in Args format: " + schema, 0);
     }
-  }
-
-  private void parseStringSchemaElement(char elementId) {
-    marshalers.put(elementId, new StringArgumentMarshaler());
   }
 
   private boolean isStringSchemaElement(String elementTail) {
@@ -73,14 +69,6 @@ public class Args {
 
   private boolean isBooleanSchemaElement(String elementTail) {
     return elementTail.length() == 0;
-  }
-
-  private void parseBooleanSchemaElement(char elementId) {
-    marshalers.put(elementId, new BooleanArgumentMarshaler());
-  }
-
-  private void parseIntegerSchemaElement(char elementId) {
-    marshalers.put(elementId, new IntegerArgumentMarshaler());
   }
 
   private boolean parseArguments() {

@@ -28,8 +28,14 @@ public class ArgsTest {
 
 
   @Test
-  public void testWithNoSchemaButWithMultipleArguments() throws Exception {
+  public void testBooleanArgumentNotInSchema() throws Exception {
     Args args = new Args("x,y", new String[]{"-x", "-y"});
     assertEquals(false, args.getBoolean('z'));
+  }
+
+  @Test
+  public void testStringArgumentNotInSchema() throws Exception {
+    Args args = new Args("s*", new String[]{});
+    assertEquals("", args.getString('s'));
   }
 }
